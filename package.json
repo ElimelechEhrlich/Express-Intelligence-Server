@@ -1,0 +1,15 @@
+{
+  "name": "express-intelligence-server",
+  "version": "1.0.0",
+  "description": "1. Deleting an agent with existing reports is only possible after user approval, and also deletes that agent's reports.\r 2. When deleting report, reportsCount decreases by 1.\r 3. Editing a report and changing agentId is permitted and requires updating the reportsCount for all related agents.",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

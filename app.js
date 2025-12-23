@@ -1,0 +1,18 @@
+import { express } from "express"
+import usersRoutes from "./routes/usersR.js";
+import agentsRoutes from "./routes/agentsR.js";
+import reportsRoutes from "./routes/reportsR.js";
+
+const app = express()
+const port = 3002
+
+app.use(express.json());
+app.use("/users", usersRoutes)
+app.use("/agents", agentsRoutes)
+app.use("/reports", reportsRoutes)
+
+
+app.listen(port, () => {
+    console.log(`server runing on http://localhost:${port}`);
+})
+
