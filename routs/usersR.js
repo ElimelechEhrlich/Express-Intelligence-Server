@@ -1,10 +1,14 @@
 import { express } from "express"
+import { addUser, deleteUser, getAllUsers, isUsernameExsist, updateUser } from "../ctrls/usersC";
 
 const router = express.Router();
 
-router.put("/:username", async (req, res) => {
-});
-router.delete("/:username", async (req, res) => {
-});
+router.get("/", getAllUsers);
+
+router.post("/", isUsernameExsist, addUser);
+
+router.put("/:username", updateUser);
+
+router.delete("/:username", deleteUser);
 
 export default router;

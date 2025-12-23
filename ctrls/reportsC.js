@@ -1,10 +1,18 @@
 import { getData } from "../data/utils/getData.js";
 
-function validateagentId(id) {
+const validateagentId = async (req, res, next) => {
     const agents = getData("./data/agents.json")
-    const agent = agents.find(agent => agent.id === id)
-    if (agent) return agent;
+    const agent = agents.find(agent => agent.id === req.body.agentId)
+    if (agent) next();
     else {
-        return `There is no agent with id ${id}`;
+        console.error(`There is no agent with id ${req.body.agentId}`);
+        res.status(404).json()
     }
+}
+
+
+
+
+export {
+    validateagentId
 }

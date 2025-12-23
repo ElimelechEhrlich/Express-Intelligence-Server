@@ -2,11 +2,13 @@ import { express } from "express"
 import usersRoutes from "./routes/usersR.js";
 import agentsRoutes from "./routes/agentsR.js";
 import reportsRoutes from "./routes/reportsR.js";
+import { validateuser } from "./ctrls/usersC.js";
 
 const app = express()
 const port = 3002
 
 app.use(express.json());
+app.use("/users", validateuser)
 app.use("/users", usersRoutes)
 app.use("/agents", agentsRoutes)
 app.use("/reports", reportsRoutes)
