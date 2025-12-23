@@ -2,20 +2,21 @@ import { getData } from "../data/utils/getData.js";
 import { writeData } from "../data/utils/writhData.js";
 
 const validateuser = async (req, res, next) => {
-    const users = getData("./data/users.json")
+    const users = await getData("./data/users.json")
+    console.log(users);
     const user = users.find(user => user.username === req.headers.name && user.password === req.headers.pass)
     if (user) {
         try {
             next()
         } catch (error) {
-            res.status().json(error)
+            res.status().json({error})
         }
     }
-    else res.status(401).json();
+    else res.sendStatus(401);
 }
 
-const getAllUsers =  async(req, res) => {
-    const users = getData("./data/users.json")
+const getAllUsers = async (req, res) => {
+    const users = await getData("./data/users.json")
     try {
         res.json(users)
     } catch (error) {
@@ -24,54 +25,62 @@ const getAllUsers =  async(req, res) => {
     }
 }
 
-const isUsernameExsist = (req, res, next) => {
-    const users = getData("./data/users.json")
+const isUsernameExsist = async (req, res, next) => {
+    const users = await getData("./data/users.json")
     const usernameExsist = users.find(user => user.username === req.body.username)
     if (!usernameExsist) {
         try {
             next()
         } catch (error) {
-            res.status().json(error)
+            console.error(error);
+            res.json({error})
         }
     }
-    else res.status(409).json();
+    else res.sendStatus(409);
 }
 
-const addUser = async(req, res) => {
+const addUser = async (req, res) => {
+    const users = await getData("./data/users.json")
     try {
         users.push({username: req.body.username, password: req.body.password})
-        writeData("./data/users.json", users)
+        await writeData("./data/users.json", JSON.stringify(users))
+        res.send()
     } catch (error) {
-        res.status().json(error)
+        console.error(error);
+        res.json(error)
     }
 }
 
-const updateUser = (req, res) => {
-    const users = getData("./data/users.json")
+const updateUser = async (req, res) => {
+    const users = await getData("./data/users.json")
     const user = users.find(user => user.username === req.params.username)
     if (user) {
         try {
             user.password = req.body.password;
-            writeData("./data/users.json", users)
+            await writeData("./data/users.json", JSON.stringify(users))
+            res.send()
         } catch (error) {
-            res.status().json(error)
+            console.error(error);
+            res.json(error)
         }
     }
-    else res.status(401).json();
+    else res.sendStatus(401);
 }
 
-const deleteUser = (req, res) => {
-    const users = getData("./data/users.json")
+const deleteUser = async (req, res) => {
+    const users = await getData("./data/users.json")
     const user = users.find(user => user.username === req.params.username)
     if (user) {
         try {
-            users.splice(users.IndexOf(user), 1)
-            writeData("./data/users.json", users)
+            users.splice(users.indexOf(), 1)
+            writeData("./data/users.json", JSON.stringify(users))
+            res.json("deleted user")
         } catch (error) {
-            res.status().json(error)
+            console.error(error);
+            res.json(error)
         }
     }
-    else res.status(401).json();
+    else res.sendStatus(401);
 }
 
 

@@ -1,5 +1,5 @@
-import { express } from "express"
-import { addUser, deleteUser, getAllUsers, isUsernameExsist, updateUser } from "../ctrls/usersC";
+import express from "express"
+import { addUser, deleteUser, getAllUsers, isUsernameExsist, updateUser } from "../ctrls/usersC.js";
 
 const router = express.Router();
 
