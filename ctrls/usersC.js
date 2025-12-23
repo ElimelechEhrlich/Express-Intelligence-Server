@@ -44,10 +44,10 @@ const addUser = async (req, res) => {
     try {
         users.push({username: req.body.username, password: req.body.password})
         await writeData("./data/users.json", JSON.stringify(users))
-        res.send()
+        res.send("user added")
     } catch (error) {
         console.error(error);
-        res.json(error)
+        res.json({error})
     }
 }
 
