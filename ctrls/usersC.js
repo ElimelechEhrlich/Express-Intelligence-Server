@@ -72,7 +72,7 @@ const deleteUser = async (req, res) => {
     const user = users.find(user => user.username === req.params.username)
     if (user) {
         try {
-            users.splice(users.indexOf(), 1)
+            users.splice(users.indexOf(user), 1)
             writeData("./data/users.json", JSON.stringify(users))
             res.json("deleted user")
         } catch (error) {

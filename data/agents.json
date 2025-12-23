@@ -1,14 +1,1 @@
-[
-    {
-        "id": 1,
-        "name": "elimelech",
-        "nickname": "eli",
-        "reportsCount": 0
-    },
-    {
-        "id": 2,
-        "name": "binyamin",
-        "nickname": "beni",
-        "reportsCount": 0
-    }
-]
+[{"id":8,"name":"nisim","nickname":"s","reportsCount":0},{"id":9,"name":"elimelech","nickname":"eli","reportsCount":0}]

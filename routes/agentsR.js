@@ -1,19 +1,17 @@
 import express from "express"
-
-
-
+import { addAgent, deleteAgent, getAgentById, getAllAgents, isIdExsist, updateAgent } from "../ctrls/agentsC.js";
+import { validateuser } from "../ctrls/usersC.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-});
-router.get("/:id", async (req, res) => {
-});
-router.post("/", async (req, res) => {
-});
-router.put("/:id", async (req, res) => {
-});
-router.delete("/:id", async (req, res) => {
-});
+router.get("/", getAllAgents);
+
+router.get("/:id", getAgentById);
+
+router.post("/", validateuser, isIdExsist, addAgent);
+
+router.put("/:id", validateuser, updateAgent);
+
+router.delete("/:id", validateuser, deleteAgent);
 
 export default router;
