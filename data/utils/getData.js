@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "fs"
+import { readFile } from "fs"
 
 
 export const readDataFromFile = (file) => {
@@ -12,7 +12,12 @@ export const readDataFromFile = (file) => {
 }
 
 async function getData(file) {
-    const data = await readDataFromFile(file)
-    return JSON.parse(data)
+    const data = JSON.parse(await readDataFromFile(file))
+    return data
 }
+
+export {
+    getData
+}
+
 
