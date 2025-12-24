@@ -26,7 +26,7 @@ const subReportCountByAgent = async (report) => {
 
 const deleteReportsByAgent = async (agent) => {
     const reports = await getData("./data/reports.json")
-    reports.filter(report => report.agentId === agent.id).forEach(agentReport => {
+    reports.filter(report => report.agentId === agent.id).forEach(async agentReport => {
         await subReportCountByAgent(agentReport)
         reports.splice(reports.indexOf(agentReport), 1)
     });   
@@ -99,14 +99,6 @@ const updateReport = async (req, res) => {
     }
     else res.sendStatus(401);
 }
-
-// const deletedReport = async (agent) => {
-//     if (agent.reportsCount === 0) {
-//         agents.splice(agents.indexOf(agent), 1)
-//         writeData("./data/agents.json", JSON.stringify(agents))
-//         res.json("deleted agent")
-//     }
-// }
 
 const deleteReport = async (req, res) => {
     const reports = await getData("./data/reports.json")    
