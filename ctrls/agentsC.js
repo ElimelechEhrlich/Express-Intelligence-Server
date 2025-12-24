@@ -41,7 +41,7 @@ const isIdExsist = async (req, res, next) => {
 const addAgent = async (req, res) => {
     const agents = await getData("./data/agents.json")
     try {
-        agents.push({id: req.body.id , name: req.body.name, nickname: req.body.nickname, reportsCount: 0})
+        agents.push({id: agents.sort((a, b) => b.id - a.id)[0] + 1 , name: req.body.name, nickname: req.body.nickname, reportsCount: 0})
         await writeData("./data/agents.json", JSON.stringify(agents))
         res.send("agent added")
     } catch (error) {
@@ -55,12 +55,11 @@ const updateAgent = async (req, res) => {
     const agent = agents.find(agent => agent.id === Number(req.params.id))      
     if (agent) {
         try {
-            if (!req.body.id) {
-                const newAgent = {...agent, ...req.body}
-                agents.splice(agents.indexOf(agent), 1, newAgent)
-                await writeData("./data/agents.json", JSON.stringify(agents))
-                res.send(agents.find(agent => agent.id === newAgent.id))
-            }
+            if (req.body.name) agent.name = req.body.name;
+            if (req.body.nickname) agent.nickname = req.body.nickname;
+            else if ((!req.body.name) && (!req.body.nickname)) return res.send("Only the `name` or `nickname` fields can be updated.");;
+            await writeData("./data/agents.json", JSON.stringify(agents))
+            res.send(agent)
         } catch (error) {
             console.error(error);
             res.json(error)
@@ -69,7 +68,7 @@ const updateAgent = async (req, res) => {
     else res.sendStatus(401);
 }
 
-const deletedAgent = async (agent) => {
+const deletedAgent = async (agent, agents) => {
     if (agent.reportsCount === 0) {
         agents.splice(agents.indexOf(agent), 1)
         writeData("./data/agents.json", JSON.stringify(agents))
@@ -83,7 +82,7 @@ const deleteAgent = async (req, res) => {
     if (agent) {
         try {
             await deleteReportsByAgent(agent)
-            await deletedAgent(agent)
+            await deletedAgent(agent, agents)
         } catch (error) {
             console.error(error);
             res.json(error)

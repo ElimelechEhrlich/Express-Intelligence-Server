@@ -56,9 +56,12 @@ const updateUser = async (req, res) => {
     const user = users.find(user => user.username === req.params.username)
     if (user) {
         try {
-            user.password = req.body.password;
-            await writeData("./data/users.json", JSON.stringify(users))
-            res.send()
+            if (req.body.password) {
+                user.password = req.body.password;
+                await writeData("./data/users.json", JSON.stringify(users))
+                res.send()
+            }
+            else res.send("Only the `password` field can be updated.");
         } catch (error) {
             console.error(error);
             res.json(error)
