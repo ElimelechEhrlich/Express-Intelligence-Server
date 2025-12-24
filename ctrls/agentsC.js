@@ -41,9 +41,12 @@ const isIdExsist = async (req, res, next) => {
 const addAgent = async (req, res) => {
     const agents = await getData("./data/agents.json")
     try {
-        agents.push({id: agents.sort((a, b) => b.id - a.id)[0] + 1 , name: req.body.name, nickname: req.body.nickname, reportsCount: 0})
-        await writeData("./data/agents.json", JSON.stringify(agents))
-        res.send("agent added")
+        if ((req.body.name) && (req.body.nickname)) {
+            agents.push({id: agents.sort((a, b) => b.id - a.id)[0] + 1 , name: req.body.name, nickname: req.body.nickname, reportsCount: 0})
+            await writeData("./data/agents.json", JSON.stringify(agents))
+            res.send("agent added")
+        }
+        else res.sendStatus(400)
     } catch (error) {
         console.error(error);
         res.json({error})

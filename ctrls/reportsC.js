@@ -70,11 +70,14 @@ const isIdExsist = async (req, res, next) => {
 const addReport = async (req, res) => {
     const reports = await getData("./data/reports.json")
     try {
-        const report = {id: reports.Length + 1 , date: new Date, content: req.body.content, agentId: req.body.agentId}
-        reports.push()
-        await addReportCountByAgent(report)
-        await writeData("./data/reports.json", JSON.stringify(reports))
-        res.send("report added")
+        if ((req.body.content) && (req.body.agentId)) {
+            const report = {id: reports.Length + 1 , date: new Date, content: req.body.content, agentId: req.body.agentId}
+            reports.push()
+            await addReportCountByAgent(report)
+            await writeData("./data/reports.json", JSON.stringify(reports))
+            res.send("report added")
+        }
+        else res.sendStatus(400)
     } catch (error) {
         console.error(error);
         res.json({error})
