@@ -57,7 +57,7 @@ const updateAgent = async (req, res) => {
         try {
             if (req.body.name) agent.name = req.body.name;
             if (req.body.nickname) agent.nickname = req.body.nickname;
-            if ((!req.body.name) && (!req.body.nickname)) return res.send("Only the `name` or `nickname` fields can be updated.");;
+            else if ((!req.body.name) && (!req.body.nickname)) return res.send("Only the `name` or `nickname` fields can be updated.");;
             await writeData("./data/agents.json", JSON.stringify(agents))
             res.send(agent)
         } catch (error) {
