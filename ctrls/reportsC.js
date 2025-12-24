@@ -10,11 +10,25 @@ const validateAgentId = async (req, res, next) => {
     }
 }
 
+const addReportCountByAgent = async (report) => {
+    const agents = await getData("./data/agents.json")
+    const agent = agents.find(agent => agent.id === Number(report.agentId))  
+    agent.reportsCount += 1
+    await writeData("./data/agents.json", JSON.stringify(agents))
+    }
+
+const subReportCountByAgent = async (report) => {
+    const agents = await getData("./data/agents.json")
+    const agent = agents.find(agent => agent.id === Number(report.agentId))  
+    agent.reportsCount -= 1
+    await writeData("./data/agents.json", JSON.stringify(agents))
+    }
+
 const deleteReportsByAgent = async (agent) => {
     const reports = await getData("./data/reports.json")
     reports.filter(report => report.agentId === agent.id).forEach(agentReport => {
+        await subReportCountByAgent(agentReport)
         reports.splice(reports.indexOf(agentReport), 1)
-        agent.reportsCount -= 1
     });   
 }
 
@@ -56,7 +70,9 @@ const isIdExsist = async (req, res, next) => {
 const addReport = async (req, res) => {
     const reports = await getData("./data/reports.json")
     try {
-        reports.push({id: reports.Length + 1 , date: new Date, content: req.body.content, agentId: req.body.agentId})
+        const report = {id: reports.Length + 1 , date: new Date, content: req.body.content, agentId: req.body.agentId}
+        reports.push()
+        await addReportCountByAgent(report)
         await writeData("./data/reports.json", JSON.stringify(reports))
         res.send("report added")
     } catch (error) {
@@ -65,24 +81,24 @@ const addReport = async (req, res) => {
     }
 }
 
-// const updateReport = async (req, res) => {
-//     const agents = await getData("./data/agents.json")    
-//     const agent = agents.find(agent => agent.id === Number(req.params.id))      
-//     if (agent) {
-//         try {
-//             if (!req.body.id) {
-//                 const newAgent = {...agent, ...req.body}
-//                 agents.splice(agents.indexOf(agent), 1, newAgent)
-//                 await writeData("./data/agents.json", JSON.stringify(agents))
-//                 res.send(agents.find(agent => agent.id === newAgent.id))
-//             }
-//         } catch (error) {
-//             console.error(error);
-//             res.json(error)
-//         }
-//     }
-//     else res.sendStatus(401);
-// }
+const updateReport = async (req, res) => {
+    const reports = await getData("./data/reports.json")    
+    const report = reports.find(report => report.id === Number(req.params.id))      
+    if (report) {
+        try {
+            if (req.body.content) {
+                report.content = req.body.content;
+                await writeData("./data/reports.json", JSON.stringify(reports))
+                res.send(report)
+            }
+            else res.send("Only the `content` field can be updated.");;
+        } catch (error) {
+            console.error(error);
+            res.json(error)
+        }
+    }
+    else res.sendStatus(401);
+}
 
 // const deletedReport = async (agent) => {
 //     if (agent.reportsCount === 0) {
@@ -92,20 +108,20 @@ const addReport = async (req, res) => {
 //     }
 // }
 
-// const deleteReport = async (req, res) => {
-//     const agents = await getData("./data/agents.json")    
-//     const agent = agents.find(agent => agent.id === Number(req.params.id))      
-//     if (agent) {
-//         try {
-//             await deleteReportsByAgent(agent)
-//             await deletedAgent(agent)
-//         } catch (error) {
-//             console.error(error);
-//             res.json(error)
-//         }
-//     }
-//     else res.sendStatus(401);
-// }
+const deleteReport = async (req, res) => {
+    const reports = await getData("./data/reports.json")    
+    const report = reports.find(report => report.id === Number(req.params.id))      
+    if (report) {
+        try {
+            await subReportCountByAgent(report)
+            reports.splice(reports.indexOf(report), 1)
+        } catch (error) {
+            console.error(error);
+            res.json(error)
+        }
+    }
+    else res.sendStatus(401);
+}
 
 export {
     validateAgentId,
