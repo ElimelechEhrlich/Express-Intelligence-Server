@@ -42,9 +42,12 @@ const isUsernameExsist = async (req, res, next) => {
 const addUser = async (req, res) => {
     const users = await getData("./data/users.json")
     try {
-        users.push({username: req.body.username, password: req.body.password})
-        await writeData("./data/users.json", JSON.stringify(users))
-        res.send("user added")
+        if ((req.body.username) && (req.body.password)) {
+            users.push({username: req.body.username, password: req.body.password})
+            await writeData("./data/users.json", JSON.stringify(users))
+            res.send("user added")
+        }
+        else res.sendStatus(400)
     } catch (error) {
         console.error(error);
         res.json({error})

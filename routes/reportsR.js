@@ -1,6 +1,6 @@
 import express from "express"
-import { addReport, deleteReport, getAllReports, getReportById, isIdExsist, updateReport, validateAgentId } from "../ctrls/reportsC";
-import { validateuser } from "../ctrls/usersC";
+import { addReport, deleteReport, getAllReports, getReportById, isIdExsist, updateReport, validateAgentId } from "../ctrls/reportsC.js";
+import { validateuser } from "../ctrls/usersC.js";
 
 const router = express.Router();
 
