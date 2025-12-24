@@ -12,6 +12,7 @@ app.use("/users", validateuser, usersRoutes)
 app.use("/agents", agentsRoutes)
 app.use("/reports", reportsRoutes)
 
+app.get("/health", (req, res) => res.json({ok: true}))
 
 app.listen(port, () => {
     console.log(`server runing on http://localhost:${port}`);
